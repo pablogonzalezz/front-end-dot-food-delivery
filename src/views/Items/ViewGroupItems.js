@@ -10,7 +10,8 @@ import {
   Badge,
 } from "shards-react";
 
-import PageTitle from "../components/common/PageTitle";
+import PageTitle from "../../components/common/PageTitle";
+import { getHost } from "../../serviceWorker";
 
 class ViewGroupItems extends React.Component {
   _isMounted = false;
@@ -27,7 +28,7 @@ class ViewGroupItems extends React.Component {
   componentDidMount(){
     this._id = this.props.match.params.id;
     this._isMounted = true;
-    fetch(`http://pablogonzalez.chickenkiller.com:2222/items/get_item_by_group/${this._id}`)
+    fetch(`http://${getHost()}:2222/items/get_item_by_group/${this._id}`)
       .then(res => res.json())
       .then(data => {if(this._isMounted) this.setState({items: data}); console.log(this.state)})
       .catch(error => console.log(error))
@@ -45,9 +46,10 @@ class ViewGroupItems extends React.Component {
     return (
       <Container fluid className="main-content-container px-4 pb-4 container-fluid">
         {/* Page Header */}
-        <Row noGutters className="page-header py-4">
+        <Row noGutters className="page-header py-4 d-flex justify-content-between align-items-center">
           <a href='/cardapio'>
           <i className="material-icons">keyboard_arrow_left</i> Voltar para Cardápio</a>
+          <button className="btn btn-primary col-sm-4 col-md-2 mt-2 mb-2"><i className="material-icons">add</i>Adicionar prato</button>
         </Row>
         {/* First Row of Posts */}
         {this.state.items.length === 0 &&

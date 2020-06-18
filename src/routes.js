@@ -7,13 +7,12 @@ import { DefaultLayout } from "./layouts";
 // Route Views
 import BlogOverview from "./views/BlogOverview";
 import UserProfileLite from "./views/UserProfileLite";
-import ViewGroups from "./views/ViewGroups";
+import ViewGroups from "./views/ItemGroup/ViewGroups";
+import CreateGroup from "./views/ItemGroup/CreateGroup";
 import Errors from "./views/Errors";
 import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
-import BlogPosts from "./views/ViewGroups";
-import ViewGroupItems from "./views/ViewGroupItems";
-
+import ViewGroupItems from "./views/Items/ViewGroupItems";
 export default [
   {
     path: "/",
@@ -37,6 +36,11 @@ export default [
     component: ViewGroups,
   },
   {
+    path: "/create-group",
+    layout: DefaultLayout,
+    component: CreateGroup,
+  },
+  {
     path: "/view-group-items/:id",
     layout: DefaultLayout,
     component: ViewGroupItems
@@ -56,9 +60,4 @@ export default [
     layout: DefaultLayout,
     component: Tables
   },
-  {
-    path: "/blog-posts",
-    layout: DefaultLayout,
-    component: BlogPosts
-  }
 ];

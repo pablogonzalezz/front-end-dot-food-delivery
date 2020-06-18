@@ -20,6 +20,14 @@ const isLocalhost = Boolean(
     )
 );
 
+export function getHost(){
+  if (isLocalhost){
+    return 'pablogonzalez.chickenkiller.com'
+  } else {
+    return window.location.host ? window.location.host : false;
+  }
+}
+
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
