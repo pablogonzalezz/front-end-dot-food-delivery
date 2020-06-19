@@ -90,7 +90,7 @@ class ViewGroups extends React.Component {
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex justify-content-between">
-                    <a id="edit-group-a" href="#" onClick={(e) => {this.handleClick(e, post.id, idx)}}>
+                    <a id="edit-group-a" href={`/update-group/${post.id}`}>
                       <i id="edit-group-i" style={{fontSize: 20}} className="material-icons">edit</i>
                     </a>
                     <a id="delete-group-a" href="#" onClick={(e) => {this.handleClick(e, post.id, idx)}}>

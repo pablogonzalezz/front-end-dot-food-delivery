@@ -24,7 +24,7 @@ export function getHost(){
   if (isLocalhost){
     return 'pablogonzalez.chickenkiller.com'
   } else {
-    return window.location.host ? window.location.host : false;
+    return window.location.hostname ? window.location.hostname.split('www.', )[0] : false;
   }
 }
 

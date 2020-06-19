@@ -7,10 +7,9 @@ import {
   Col,
   Card,
   CardBody,
+  CardFooter,
   Badge,
 } from "shards-react";
-
-import PageTitle from "../../components/common/PageTitle";
 import { getHost } from "../../serviceWorker";
 
 class ViewGroupItems extends React.Component {
@@ -23,6 +22,8 @@ class ViewGroupItems extends React.Component {
     this.state = {
       items: []
     }
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount(){
@@ -38,6 +39,26 @@ class ViewGroupItems extends React.Component {
     this._isMounted = false;
   }
 
+  handleClick(event, id, idx) {
+    event.preventDefault();
+    if(event.target.id === "delete-group-i" || event.target.id === "delete-group-a") {
+      if (window.confirm('Tem certeza que deseja deletar esse item?')) {
+        fetch(`http://${getHost()}:2222/items/delete_item/${id}`, {
+          method: "DELETE", 
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
+        })
+          .then(res => res.json())
+          .catch(error => console.log(error))
+
+        let array = this.state.items;
+        array.splice(idx, 1);
+        this.setState({items: array})
+      }
+    } else {
+
+    }
+  }
+
   render() {
     const {
       items,
@@ -49,7 +70,7 @@ class ViewGroupItems extends React.Component {
         <Row noGutters className="page-header py-4 d-flex justify-content-between align-items-center">
           <a href='/cardapio'>
           <i className="material-icons">keyboard_arrow_left</i> Voltar para Cardápio</a>
-          <button className="btn btn-primary col-sm-4 col-md-2 mt-2 mb-2"><i className="material-icons">add</i>Adicionar prato</button>
+          <a href={`/create-item/${this.props.match.params.id}`} className="btn btn-primary col-sm-4 col-md-2 mt-2 mb-2"><i className="material-icons">add</i>Adicionar item</a>
         </Row>
         {/* First Row of Posts */}
         {this.state.items.length === 0 &&
@@ -81,13 +102,24 @@ class ViewGroupItems extends React.Component {
                 </div>
                 <CardBody>
                   <h5 className="card-title">
-                    <a href="#" className="text-fiord-blue">
+                    <a href={`/update-item/${post.id}`} className="text-fiord-blue">
                       {post.title}
                     </a>
                   </h5>
                   <p className="card-text d-inline-block mb-3">{post.description}</p>
-                  <span>R$15,00</span>
+                  <span style={{ fontSize: 18 }} className="mt-4 d-block">R$ {post.price}</span>
                 </CardBody>
+                <CardFooter>
+                  <div className="d-flex justify-content-between">
+                    <a id="edit-group-a" href={`/update-item/${post.id}`}>
+                      <i id="edit-group-i" style={{fontSize: 20}} className="material-icons">edit</i>
+                    </a>
+                    <a id="delete-group-a" href="#" onClick={(e) => {this.handleClick(e, post.id, idx)}}>
+                      <i id="delete-group-i" style={{fontSize: 20}} className="material-icons">delete_outline</i>
+                    </a>
+                  </div>
+                  
+                </CardFooter>
               </Card>
             </Col>
           ))}

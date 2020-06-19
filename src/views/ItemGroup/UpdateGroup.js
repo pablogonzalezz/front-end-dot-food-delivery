@@ -18,6 +18,7 @@ import { getHost } from "../../serviceWorker";
 
 class CreateGroup extends React.Component {
   _isMounted = false;
+  _id = null;
 
   constructor(props) {
     super(props);
@@ -34,6 +35,19 @@ class CreateGroup extends React.Component {
 
   componentDidMount(){
     this._isMounted = true;
+    this._id = this.props.match.params.id;
+
+    fetch(`http://${getHost()}:2222/item_group/get_item_group/${this._id}`)
+    .then(res => res.json())
+    .then(data => {if(this._isMounted) {
+        console.log(data[0])
+        this.setState({
+            title: data[0].title,
+            description: data[0].description,
+            image: data[0].image
+        })
+    }})
+    .catch(error => console.log(error))
   }
 
   componentWillUnmount(){
@@ -41,7 +55,7 @@ class CreateGroup extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch(`http://${getHost()}:2222/item_group/create_item_group`, { 
+    fetch(`http://${getHost()}:2222/item_group/update_item_group/${this._id}`, { 
         method: "POST", 
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ 
@@ -52,9 +66,9 @@ class CreateGroup extends React.Component {
     })
     .then(function(response) { 
         if(response.status === 200) {
-            alert("Categoria criada com sucesso!");
+            alert("Categoria atualizada com sucesso!");
         } else {
-            alert("Houve um erro ao criar a categoria.");
+            alert("Houve um erro ao atualizar a categoria.");
         }
         
     });
@@ -67,6 +81,11 @@ class CreateGroup extends React.Component {
   }
 
   render() {
+    const {
+        title,
+        description,
+        image
+      } = this.state;
     return (
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
@@ -79,7 +98,7 @@ class CreateGroup extends React.Component {
             <Col lg="12" md="12" sm="12" className="mb-4">
                 <Card>
                     <CardHeader className="border-bottom">
-                        <h6 className="m-0">Criar nova categoria</h6>
+                        <h6 className="m-0">Atualizar categoria</h6>
                     </CardHeader>
 
                     <ListGroup flush>
@@ -95,6 +114,7 @@ class CreateGroup extends React.Component {
                                         placeholder="Nome da categoria"
                                         onChange={this.handleChange}
                                         type="text"
+                                        value={`${title}`}
                                         />
                                     </Col>
                                     <Col md="6">
@@ -103,6 +123,7 @@ class CreateGroup extends React.Component {
                                         id="image"
                                         placeholder="Url para a imagem da categoria"
                                         onChange={this.handleChange}
+                                        value={`${image}`}
                                         />
                                     </Col>
                                     </Row>
@@ -112,11 +133,12 @@ class CreateGroup extends React.Component {
                                     <FormInput 
                                     id="description" 
                                     placeholder="Descrição da categoria" 
-                                    onChange={this.handleChange} 
+                                    onChange={this.handleChange}
+                                    value={`${description}`}
                                     />
                                     </FormGroup>
 
-                                    <Button type="submit"><i className="material-icons">add</i> Criar nova categoria</Button>
+                                    <Button type="submit"><i className="material-icons">update</i> Atualizar categoria</Button>
                                 </Form>
                                 </Col>
                             </Row>
