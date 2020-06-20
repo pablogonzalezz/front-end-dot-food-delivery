@@ -4,6 +4,9 @@ import { Redirect } from "react-router-dom";
 // Layout Types
 import { DefaultLayout } from "./layouts";
 
+//  Order Routes
+import ReceivedOrder from "./views/Order/ReceivedOrder";
+
 // ItemGroup Routes
 import ViewGroups from "./views/ItemGroup/ViewGroups";
 import CreateGroup from "./views/ItemGroup/CreateGroup";
@@ -22,6 +25,14 @@ import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 
 export default [
+  // ############# Item Groups #############
+  {
+    path: "/pedidos",
+    layout: DefaultLayout,
+    component: ReceivedOrder,
+  },
+
+
   // ############# Item Groups #############
   {
     path: "/cardapio",
@@ -57,14 +68,17 @@ export default [
     component: UpdateItem
   },
 
-
-  // ########################
+  
+  // ############# Página inicial #############
   {
     path: "/",
     exact: true,
     layout: DefaultLayout,
-    component: () => <Redirect to="/blog-overview" />
+    component: () => <Redirect to="/pedidos" />
   },
+
+
+  // ########################
   {
     path: "/blog-overview",
     layout: DefaultLayout,
