@@ -2,7 +2,7 @@ export default function() {
   return [
     {
       title: "Pedidos",
-      to: "/blog-overview",
+      to: "/pedidos",
       htmlBefore: '<i class="material-icons">pending_actions</i>',
       htmlAfter: ""
     },
