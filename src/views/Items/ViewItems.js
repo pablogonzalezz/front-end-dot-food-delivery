@@ -10,7 +10,7 @@ import {
   CardFooter,
   Badge,
 } from "shards-react";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class ViewGroupItems extends React.Component {
   _isMounted = false;
@@ -29,7 +29,7 @@ class ViewGroupItems extends React.Component {
   componentDidMount(){
     this._id = this.props.match.params.id;
     this._isMounted = true;
-    fetch(`http://${getHost()}:2222/items/get_item_by_group/${this._id}`)
+    api.getItemByGroup(this._id)
       .then(res => res.json())
       .then(data => {if(this._isMounted) this.setState({items: data}); console.log(this.state)})
       .catch(error => console.log(error))
@@ -43,10 +43,7 @@ class ViewGroupItems extends React.Component {
     event.preventDefault();
     if(event.target.id === "delete-group-i" || event.target.id === "delete-group-a") {
       if (window.confirm('Tem certeza que deseja deletar esse item?')) {
-        fetch(`http://${getHost()}:2222/items/delete_item/${id}`, {
-          method: "DELETE", 
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        })
+        api.deleteItem(id)
           .then(res => res.json())
           .catch(error => console.log(error))
 
@@ -54,14 +51,12 @@ class ViewGroupItems extends React.Component {
         array.splice(idx, 1);
         this.setState({items: array})
       }
-    } else {
-
     }
   }
 
   render() {
     const {
-      items,
+      items
     } = this.state;
 
     return (

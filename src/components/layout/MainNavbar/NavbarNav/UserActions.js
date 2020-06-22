@@ -9,6 +9,7 @@ import {
   NavItem,
   NavLink
 } from "shards-react";
+import { logout } from "../../../../services/auth";
 
 export default class UserActions extends React.Component {
   constructor(props) {
@@ -18,13 +19,23 @@ export default class UserActions extends React.Component {
       visible: false
     };
 
+    this.handleClick = this.handleClick.bind(this);
     this.toggleUserActions = this.toggleUserActions.bind(this);
   }
 
-  toggleUserActions() {
+  toggleUserActions(e) {
     this.setState({
       visible: !this.state.visible
     });
+  }
+
+  handleClick(event) {
+    if(event.target.id === "logout") {
+      logout();
+      window.location = "/"
+    } else {
+
+    }
   }
 
   render() {
@@ -40,20 +51,11 @@ export default class UserActions extends React.Component {
         </DropdownToggle>
         <Collapse tag={DropdownMenu} right small open={this.state.visible}>
           <DropdownItem tag={Link} to="user-profile">
-            <i className="material-icons">&#xE7FD;</i> Profile
-          </DropdownItem>
-          <DropdownItem tag={Link} to="edit-user-profile">
-            <i className="material-icons">&#xE8B8;</i> Edit Profile
-          </DropdownItem>
-          <DropdownItem tag={Link} to="file-manager-list">
-            <i className="material-icons">&#xE2C7;</i> Files
-          </DropdownItem>
-          <DropdownItem tag={Link} to="transaction-history">
-            <i className="material-icons">&#xE896;</i> Transactions
+            <i className="material-icons">&#xE7FD;</i> Perfil
           </DropdownItem>
           <DropdownItem divider />
-          <DropdownItem tag={Link} to="/" className="text-danger">
-            <i className="material-icons text-danger">&#xE879;</i> Logout
+          <DropdownItem  id="logout" className="text-danger" onClick={this.handleClick}>
+            <i className="material-icons text-danger">&#xE879;</i> Sair
           </DropdownItem>
         </Collapse>
       </NavItem>

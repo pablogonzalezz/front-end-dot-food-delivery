@@ -15,7 +15,7 @@ import {
   FormGroup,
   FormSelect
 } from "shards-react";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class UpdateItem extends React.Component {
   _isMounted = false;
@@ -39,9 +39,9 @@ class UpdateItem extends React.Component {
 
   componentDidMount(){
     this._isMounted = true;
-
     this._id = this.props.match.params.id;
-    fetch(`http://${getHost()}:2222/items/get_item/${this._id}`)
+
+    api.getItemById(this._id)
     .then(res => res.json())
     .then(data => {if(this._isMounted) {
         console.log(data[0])
@@ -56,7 +56,7 @@ class UpdateItem extends React.Component {
     .catch(error => console.log(error))
 
     
-    fetch(`http://${getHost()}:2222/item_group/get_all`)
+    api.getAllItemGroups()
     .then(res => res.json())
     .then(data => {if(this._isMounted) this.setState({item_groups: data})})
     .catch(error => console.log(error))
@@ -67,18 +67,11 @@ class UpdateItem extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state)
-    fetch(`http://${getHost()}:2222/items/update_item/${this._id}`, { 
-        method: "POST", 
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ 
-            title: this.state.title,
-            description: this.state.description,
-            image: this.state.image,
-            group_id: this.state.group_id,
-            price: this.state.price
-        }) 
-    })
+    event.preventDefault();
+
+    let state = this.state;
+
+    api.updateItem(state.title, state.description, state.image, state.price, state.group_id, this._id)
     .then(function(response) { 
         if(response.status === 200) {
             alert("Item atualizado com sucesso!");
@@ -87,8 +80,6 @@ class UpdateItem extends React.Component {
             console.log(response)
         }
     });
-    
-    event.preventDefault();
   }
 
   handleChange(event) {

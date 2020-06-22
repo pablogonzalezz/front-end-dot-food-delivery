@@ -22,7 +22,7 @@ const isLocalhost = Boolean(
 
 export function getHost(){
   if (isLocalhost){
-    return 'pablogonzalez.chickenkiller.com'
+    return 'localhost'
   } else {
     return window.location.hostname ? window.location.hostname.split('www.', )[0] : false;
   }

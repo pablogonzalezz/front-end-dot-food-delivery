@@ -36,10 +36,6 @@ class ReceivedOrder extends React.Component {
     }
 
     render() {
-        const {
-            item_groups
-        } = this.state;
-
         return(
             <Container fluid className="main-content-container px-4">
                 {/* Page Header */}
