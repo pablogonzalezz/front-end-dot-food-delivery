@@ -14,7 +14,7 @@ import {
   FormInput,
   FormGroup,
 } from "shards-react";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class CreateGroup extends React.Component {
   _isMounted = false;
@@ -33,11 +33,11 @@ class CreateGroup extends React.Component {
     }
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     this._isMounted = true;
     this._id = this.props.match.params.id;
 
-    fetch(`http://${getHost()}:2222/item_group/get_item_group/${this._id}`)
+    await api.getItemGroupById(this._id)
     .then(res => res.json())
     .then(data => {if(this._isMounted) {
         console.log(data[0])
@@ -54,26 +54,17 @@ class CreateGroup extends React.Component {
     this._isMounted = false;
   }
 
-  handleSubmit(event) {
-    fetch(`http://${getHost()}:2222/item_group/update_item_group/${this._id}`, { 
-        method: "POST", 
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ 
-            title: this.state.title,
-            description: this.state.description,
-            image: this.state.image
-        }) 
-    })
+  async handleSubmit(event) {
+    event.preventDefault();
+
+    await api.updateItemGroup(this.state.title, this.state.description, this.state.image, this._id)
     .then(function(response) { 
         if(response.status === 200) {
             alert("Categoria atualizada com sucesso!");
         } else {
             alert("Houve um erro ao atualizar a categoria.");
-        }
-        
+        }  
     });
-    
-    event.preventDefault();
   }
 
   handleChange(event) {

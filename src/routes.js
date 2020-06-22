@@ -1,11 +1,15 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 // Layout Types
 import { DefaultLayout } from "./layouts";
 
 //  Order Routes
 import ReceivedOrder from "./views/Order/ReceivedOrder";
+
+//  Login Routes
+import Login from "./views/Login/Login";
 
 // ItemGroup Routes
 import ViewGroups from "./views/ItemGroup/ViewGroups";
@@ -17,91 +21,126 @@ import ViewItems from "./views/Items/ViewItems";
 import CreateItem from "./views/Items/CreateItem";
 import UpdateItem from "./views/Items/UpdateItem";
 
+import { isAuthenticated } from "./services/auth";
 
-import BlogOverview from "./views/BlogOverview";
-import UserProfileLite from "./views/UserProfileLite";
-import Errors from "./views/Errors";
-import ComponentsOverview from "./views/ComponentsOverview";
-import Tables from "./views/Tables";
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <DefaultLayout>
+          <Component {...props}/>
+        </DefaultLayout>
+      ) : (
+        <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
+      )
+    }
+  />
+);
 
-export default [
-  // ############# Item Groups #############
-  {
-    path: "/pedidos",
-    layout: DefaultLayout,
-    component: ReceivedOrder,
-  },
+const Routes = () => (
+  <BrowserRouter>
+    <Switch>
+      <Redirect from="/" to="/pedidos" exact/>
+      <Route path="/login" component={Login}/>
+      <PrivateRoute path="/pedidos" component={ReceivedOrder}/>
+      <PrivateRoute path="/cardapio" component={ViewGroups}/>
+      <PrivateRoute path="/create-group" component={CreateGroup}/>
+      <PrivateRoute path="/update-group/:id" component={UpdateGroup}/>
+      <PrivateRoute path="/view-group-items/:id" component={ViewItems}/>
+      <PrivateRoute path="/create-item/:id" component={CreateItem}/>
+      <PrivateRoute path="/update-item/:id" component={UpdateItem}/>
+    </Switch>
+  </BrowserRouter>
+)
+
+export default Routes;
+// export default [
+//   // ############# Pedidos Admin #############
+//   {
+//     path: "/pedidos",
+//     layout: DefaultLayout,
+//     component: ReceivedOrder,
+//   },
 
 
-  // ############# Item Groups #############
-  {
-    path: "/cardapio",
-    layout: DefaultLayout,
-    component: ViewGroups,
-  },
-  {
-    path: "/create-group",
-    layout: DefaultLayout,
-    component: CreateGroup,
-  },
-  {
-    path: "/update-group/:id",
-    layout: DefaultLayout,
-    component: UpdateGroup,
-  },
+//   // ############# Login #############
+//   {
+//     path: "/login",
+//     layout: BlankLayout,
+//     component: Login,
+//   },
+  
+
+//   // ############# Item Groups #############
+//   {
+//     path: "/cardapio",
+//     layout: DefaultLayout,
+//     component: ViewGroups,
+//   },
+//   {
+//     path: "/create-group",
+//     layout: DefaultLayout,
+//     component: CreateGroup,
+//   },
+//   {
+//     path: "/update-group/:id",
+//     layout: DefaultLayout,
+//     component: UpdateGroup,
+//   },
 
 
-  // ############# Items #############
-  {
-    path: "/view-group-items/:id",
-    layout: DefaultLayout,
-    component: ViewItems
-  },
-  {
-    path: "/create-item/:id",
-    layout: DefaultLayout,
-    component: CreateItem
-  },
-  {
-    path: "/update-item/:id",
-    layout: DefaultLayout,
-    component: UpdateItem
-  },
+//   // ############# Items #############
+//   {
+//     path: "/view-group-items/:id",
+//     layout: DefaultLayout,
+//     component: ViewItems
+//   },
+//   {
+//     path: "/create-item/:id",
+//     layout: DefaultLayout,
+//     component: CreateItem
+//   },
+//   {
+//     path: "/update-item/:id",
+//     layout: DefaultLayout,
+//     component: UpdateItem
+//   },
 
   
-  // ############# Página inicial #############
-  {
-    path: "/",
-    exact: true,
-    layout: DefaultLayout,
-    component: () => <Redirect to="/pedidos" />
-  },
+//   // ############# Página inicial #############
+//   {
+//     path: "/",
+//     exact: true,
+//     layout: DefaultLayout,
+//     component: () => <Redirect to={`${home_path}`} />
+//   },
 
 
-  // ########################
-  {
-    path: "/blog-overview",
-    layout: DefaultLayout,
-    component: BlogOverview
-  },
-  {
-    path: "/user-profile-lite",
-    layout: DefaultLayout,
-    component: UserProfileLite
-  },
-  {
-    path: "/errors",
-    layout: DefaultLayout,
-    component: Errors
-  },
-  {
-    path: "/components-overview",
-    layout: DefaultLayout,
-    component: ComponentsOverview
-  },
-  {
-    path: "/tables",
-    layout: DefaultLayout,
-    component: Tables
-  },
-];
+//   // ########################
+//   {
+//     path: "/blog-overview",
+//     layout: DefaultLayout,
+//     component: BlogOverview
+//   },
+//   {
+//     path: "/user-profile-lite",
+//     layout: DefaultLayout,
+//     component: UserProfileLite
+//   },
+//   {
+//     path: "/errors",
+//     layout: DefaultLayout,
+//     component: Errors
+//   },
+//   {
+//     path: "/components-overview",
+//     layout: DefaultLayout,
+//     component: ComponentsOverview
+//   },
+//   {
+//     path: "/tables",
+//     layout: DefaultLayout,
+//     component: Tables
+//   },
+// ];

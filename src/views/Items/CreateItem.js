@@ -15,7 +15,7 @@ import {
   FormGroup,
   FormSelect
 } from "shards-react";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class CreateItem extends React.Component {
   _isMounted = false;
@@ -41,7 +41,8 @@ class CreateItem extends React.Component {
     this._id = this.props.match.params.id;
     this.setState({group_id: this._id})
     this._isMounted = true;
-    fetch(`http://${getHost()}:2222/item_group/get_all`)
+
+    api.getAllItemGroups()
     .then(res => res.json())
     .then(data => {if(this._isMounted) this.setState({item_groups: data})})
     .catch(error => console.log(error))
@@ -52,18 +53,10 @@ class CreateItem extends React.Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
+
     console.log(this.state)
-    fetch(`http://${getHost()}:2222/items/create_item`, { 
-        method: "POST", 
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ 
-            title: this.state.title,
-            description: this.state.description,
-            image: this.state.image,
-            group_id: this.state.group_id,
-            price: this.state.price
-        }) 
-    })
+    api.createItem(this.state.title, this.state.description, this.state.image, this.state.price, this.state.group_id)
     .then(function(response) { 
         if(response.status === 200) {
             alert("Item criado com sucesso!");
@@ -72,8 +65,6 @@ class CreateItem extends React.Component {
             console.log(response)
         }
     });
-    
-    event.preventDefault();
   }
 
   handleChange(event) {

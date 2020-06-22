@@ -11,7 +11,7 @@ import {
 } from "shards-react";
 
 import PageTitle from "../../components/common/PageTitle";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class ViewGroups extends React.Component {
   _isMounted = false;
@@ -27,29 +27,22 @@ class ViewGroups extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     this._isMounted = true;
-
-    fetch(`http://${getHost()}:2222/item_group/get_all`)
-      .then(res => res.json())
-      .then(data => {if(this._isMounted) this.setState({item_groups: data})})
-      .catch(error => console.log(error))
+  
+    const result = await api.getAllItemGroups();
+    await result.json().then(res => this.setState({item_groups: res}))
   }
 
   componentWillUnmount(){
     this._isMounted = false;
   }
 
-  handleClick(event, id, idx) {
+  async handleClick(event, id, idx) {
     event.preventDefault();
     if(event.target.id === "delete-group-i" || event.target.id === "delete-group-a") {
       if (window.confirm('Tem certeza que deseja deletar essa categoria?')) {
-        fetch(`http://${getHost()}:2222/item_group/delete_item_group/${id}`, {
-          method: "DELETE", 
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        })
-          .then(res => res.json())
-          .catch(error => console.log(error))
+        await api.deleteItemGroup(id);
 
         let array = this.state.item_groups;
         array.splice(idx, 1);

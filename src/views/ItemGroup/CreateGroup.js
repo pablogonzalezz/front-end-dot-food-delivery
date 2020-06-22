@@ -14,7 +14,7 @@ import {
   FormInput,
   FormGroup,
 } from "shards-react";
-import { getHost } from "../../serviceWorker";
+import * as api from "../../services/api";
 
 class CreateGroup extends React.Component {
   _isMounted = false;
@@ -40,26 +40,16 @@ class CreateGroup extends React.Component {
     this._isMounted = false;
   }
 
-  handleSubmit(event) {
-    fetch(`http://${getHost()}:2222/item_group/create_item_group`, { 
-        method: "POST", 
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ 
-            title: this.state.title,
-            description: this.state.description,
-            image: this.state.image
-        }) 
-    })
-    .then(function(response) { 
-        if(response.status === 200) {
-            alert("Categoria criada com sucesso!");
-        } else {
-            alert("Houve um erro ao criar a categoria.");
-        }
-        
-    });
-    
+  async handleSubmit(event) {
     event.preventDefault();
+    await api.createItemGroup(this.state.title, this.state.description, this.state.image)
+    .then(res => {
+      if (res.status === 200) {
+        alert('Categoria criada com sucesso!')
+      } else {
+        alert('Houve um erro ao criar a categoria.')
+      }
+    })  
   }
 
   handleChange(event) {
