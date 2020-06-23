@@ -28,6 +28,7 @@ class Login extends React.Component {
       this.state = {
         login: "",
         password: "",
+        errors: ""
       }
     }
 
@@ -49,15 +50,23 @@ class Login extends React.Component {
         const { history } = this.props;
 
         api.Authenticate(this.state.login, this.state.password)
-        .then(res => res.json())
-        .then(data => {
-            login(data.token)
-            history.push("/")
+        .then(res => {
+            if(res.status === 200) {
+                res.json().then(data => {
+                    login(data.token, this.state.login);
+                    history.push("/")
+                })
+            } else {
+                this.setState({errors: "Login não autorizado. Verifique seu login e senha."})
+            }
         })
     }
   
 
     render() {
+        const {
+            errors
+          } = this.state;
         return(
             <Container fluid className="main-content-container px-4 align-items-center">
                 {/* Page Header */}
@@ -80,6 +89,7 @@ class Login extends React.Component {
 
                             <CardBody className="">
                                 <ListGroup flush>
+                                    <p className="text-danger">{errors}</p>
                                     <ListGroupItem className="justify-content-center">
                                         <Row>
                                             <Col>
@@ -127,6 +137,7 @@ class Login extends React.Component {
                     {/* Os mais pedidos */}
 
                 </Row>
+                <p align="center" className="copyright ml-auto my-auto mr-2">©2020 Dot Food Delivery. Todos os direitos reservados</p>
             </Container>
         );
     }
