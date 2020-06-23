@@ -9,14 +9,15 @@ import {
   NavItem,
   NavLink
 } from "shards-react";
-import { logout } from "../../../../services/auth";
+import { logout, getLogin } from "../../../../services/auth";
 
 export default class UserActions extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      visible: false
+      visible: false,
+      login: ""
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -38,16 +39,30 @@ export default class UserActions extends React.Component {
     }
   }
 
+  componentDidMount(){
+    this._isMounted = true;
+
+    this.setState({login: getLogin()})
+  }
+
+  componentWillUnmount(){
+    this._isMounted = false;
+  }
+
   render() {
+    const {
+      login
+    } = this.state;
+    
     return (
       <NavItem tag={Dropdown} caret toggle={this.toggleUserActions}>
         <DropdownToggle caret tag={NavLink} className="text-nowrap px-3">
           <img
             className="user-avatar rounded-circle mr-2"
-            src={require("./../../../../images/avatars/0.jpg")}
+            src={require("./../../../../images/avatars/default.png")}
             alt="User Avatar"
           />{" "}
-          <span className="d-none d-md-inline-block">Sierra Brooks</span>
+          <span className="d-none d-md-inline-block">{ login }</span>
         </DropdownToggle>
         <Collapse tag={DropdownMenu} right small open={this.state.visible}>
           <DropdownItem tag={Link} to="user-profile">

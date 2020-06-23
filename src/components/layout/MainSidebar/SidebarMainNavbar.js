@@ -35,7 +35,7 @@ class SidebarMainNavbar extends React.Component {
                 className="d-inline-block align-top mr-1"
                 style={{ maxWidth: "150px" }}
                 src="https://drive.google.com/uc?id=1u8Mh02ru-ThLd0Yo0SmFMedgkHard9Et"
-                alt="Shards Dashboard"
+                alt="Dot Food Delivery"
               />
               {/* {!hideLogoText && (
                 <span className="d-none d-md-inline ml-1">
