@@ -21,7 +21,7 @@ $new-grays: map-merge((
 // Accent color
 // Override this color and recompile the package to quickly change
 // the general accent color theme.
-$accent-color: theme-color('primary') !default;
+$accent-color: theme-color('--red') !default;
 
 
 // Text color adjustments

@@ -27,7 +27,7 @@
   --white: #fff;
   --gray: #868e96;
   --gray-dark: #343a40;
-  --primary: #007bff;
+  --primary: #c4183c;
   --secondary: #5A6169;
   --success: #17c671;
   --info: #00b8d8;
@@ -46,6 +46,29 @@
 @media (max-width: 575.98px) {
   html {
     font-size: 15px; } }
+
+.order-navbar {
+  right: 0;
+  left: 0;
+  top: 0;
+  position: fixed;
+  height: 4em;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  z-index: 9;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.cart-btn {
+  padding: .375rem .75rem
+}
+
+.cart-modal {
+  z-index: 10;
+}
 
 body {
   font-size: 1rem;

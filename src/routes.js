@@ -7,9 +7,12 @@ import { DefaultLayout } from "./layouts";
 
 //  Order Routes
 import ReceivedOrder from "./views/Order/ReceivedOrder";
+import MakeOrder from "./views/Order/MakeOrder";
+import MakeOrderViewItems from "./views/Order/MakeOrderViewItems";
 
 //  Login Routes
 import Login from "./views/Login/Login";
+import { isAuthenticated } from "./services/auth";
 
 // ItemGroup Routes
 import ViewGroups from "./views/ItemGroup/ViewGroups";
@@ -21,7 +24,6 @@ import ViewItems from "./views/Items/ViewItems";
 import CreateItem from "./views/Items/CreateItem";
 import UpdateItem from "./views/Items/UpdateItem";
 
-import { isAuthenticated } from "./services/auth";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -43,6 +45,8 @@ const Routes = () => (
     <Switch>
       <Redirect from="/" to="/pedidos" exact/>
       <Route path="/login" component={Login}/>
+      <Route path="/fazer-pedido" component={MakeOrder}/>
+      <Route path="/fazer-pedido-items/:id" component={MakeOrderViewItems}/>
       <PrivateRoute path="/pedidos" component={ReceivedOrder}/>
       <PrivateRoute path="/cardapio" component={ViewGroups}/>
       <PrivateRoute path="/create-group" component={CreateGroup}/>

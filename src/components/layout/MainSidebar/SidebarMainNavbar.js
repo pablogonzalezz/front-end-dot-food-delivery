@@ -37,11 +37,6 @@ class SidebarMainNavbar extends React.Component {
                 src="https://drive.google.com/uc?id=1u8Mh02ru-ThLd0Yo0SmFMedgkHard9Et"
                 alt="Dot Food Delivery"
               />
-              {/* {!hideLogoText && (
-                <span className="d-none d-md-inline ml-1">
-                  Shards Dashboard
-                </span>
-              )} */}
             </div>
           </NavbarBrand>
           {/* eslint-disable-next-line */}
