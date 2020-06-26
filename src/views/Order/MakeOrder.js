@@ -153,7 +153,7 @@ class MakeOrder extends React.Component {
         </div>  
 
         <div>
-            <Modal className="cart-modal mt-5" open={open_modal_cart} toggle={this.toggle_modal_cart}e>
+            <Modal className="cart-modal" open={open_modal_cart} toggle={this.toggle_modal_cart}e>
             <ModalHeader>Carrinho</ModalHeader>
                 <ModalBody>
                 {items_in_cart.length === 0 &&
@@ -163,24 +163,26 @@ class MakeOrder extends React.Component {
                 </div>
                 }
                 {items_in_cart.map((item, idx) => (
-                    <div className="d-flex justify-content-between align-items-center" key={idx}>
-                        <div lg="8" md="8" sm="8">
-                            <span>{item.title}</span>
-                            <p className="m-0 my-1 mb-2 text-muted">{item.description}</p>
-                            {item.obs != null &&
-                                <p className="m-0 my-1 mb-2 text-danger">obs:{item.obs}</p>
-                            }
-                        </div>
-                        <Col lg="3" md="3" sm="4" className="form-group d-block">
-                            <label htmlFor="obs">Quantidade</label>
-                            <p>{item.quantity}</p>
-                        </Col>
-                        <div lg="1" md="1" sm="1" className="form-group d-block">
-                            <a role="button" id="delete-item-cart" onClick={(e) => {this.deleteFromCart(idx)}}>
-                                <i id="edit-group-i" style={{fontSize: 24}} className="material-icons text-danger">delete</i>
-                            </a>
-                        </div>
-                    </div>
+                   <div className="d-flex justify-content-between align-items-center" key={idx}>
+                   <div lg="8" md="8" sm="8">
+                       <span>{item.title}</span>
+                       <p className="m-0 my-1 mb-2 text-muted">{item.description}</p>
+                       {item.obs != null &&
+                           <p className="m-0 my-1 mb-2 text-danger">obs:{item.obs}</p>
+                       }
+                   </div>
+                   <div className="d-flex justify-content-between">
+                     <Col className="form-group d-block">
+                         <label htmlFor="obs">Quantidade</label>
+                         <p className="w-100">x{item.quantity} = R$ {item.quantity*item.price}</p>
+                     </Col>
+                     <div lg="1" md="1" sm="1" className="form-group d-block">
+                         <a role="button" id="delete-item-cart" onClick={(e) => {this.deleteFromCart(idx)}}>
+                             <i id="edit-group-i" style={{fontSize: 24}} className="material-icons text-danger">delete</i>
+                         </a>
+                     </div>
+                   </div>
+               </div>
                 ))}
                 </ModalBody>
                 <ModalFooter>
