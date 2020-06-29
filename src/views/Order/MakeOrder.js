@@ -20,6 +20,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import MainFooter from "../../components/layout/MainFooter";
 import PageTitle from "../../components/common/PageTitle";
 import * as api from "../../services/api";
+import { getLogin } from "../../services/auth";
 
 class MakeOrder extends React.Component {
   _isMounted = false;
@@ -31,6 +32,7 @@ class MakeOrder extends React.Component {
       item_groups: [],
       items_in_cart: JSON.parse(sessionStorage.getItem('items_in_cart')) || [],
       open_modal_cart: false,
+      next: null
     }
 
     this.deleteFromCart = this.deleteFromCart.bind(this);
@@ -42,6 +44,12 @@ class MakeOrder extends React.Component {
 
     const result = await api.getAllItemGroups();
     await result.json().then(res => this.setState({ item_groups: res }))
+
+    if(getLogin() != null) {
+      this.setState({next: '/confirmar-pedido'})
+    } else {
+      this.setState({next: '/login-pedido'})
+    }
   }
 
   componentWillUnmount() {
@@ -66,7 +74,8 @@ class MakeOrder extends React.Component {
     const {
       item_groups,
       items_in_cart,
-      open_modal_cart
+      open_modal_cart,
+      next
     } = this.state;
 
     return (
@@ -126,7 +135,7 @@ class MakeOrder extends React.Component {
           <Modal className="" show={open_modal_cart}>
 
             <ModalHeader className="d-flex justify-content-between justify-items-center">
-              <span>Carrinho</span>
+              <h4 className="m-0">Carrinho</h4>
               <i onClick={this.toggle_modal_cart} className="material-icons" style={{ fontSize: 22 }}>close</i>
             </ModalHeader>
 
@@ -147,9 +156,9 @@ class MakeOrder extends React.Component {
                     }
                   </div>
                   <div className="d-flex justify-content-between">
-                    <Col className="form-group d-block">
+                    <Col className="form-group d-block m-auto">
                       <label htmlFor="obs">Quantidade</label>
-                      <p className="w-100">x{item.quantity} = R$ {item.quantity * item.price}</p>
+                      <span className="w-100">x{item.quantity} = R$ {item.quantity * item.price}</span>
                     </Col>
                     <div lg="1" md="1" sm="1" className="form-group d-block">
                       <a role="button" id="delete-item-cart" onClick={(e) => { this.deleteFromCart(idx) }}>
@@ -163,7 +172,7 @@ class MakeOrder extends React.Component {
             <ModalFooter>
               <div className="d-flex justify-content-between w-100">
                 <Button className="btn btn-primary cart-btn" onClick={this.toggle_modal_cart}>Continuar Comprando</Button>
-                <Button className="btn btn-outline-primary cart-btn" type="submit"><i className="material-icons">check</i> Finalizar Pedido</Button>
+                <Button type="button" href={next} className="btn btn-outline-primary cart-btn" disabled={!items_in_cart.length > 0}><i className="material-icons">check</i> Finalizar Pedido</Button>
               </div>
 
             </ModalFooter>
