@@ -8,6 +8,7 @@ import {
     CardHeader,
     Button,
     ListGroupItem,
+    FormRadio,
 } from "shards-react";
 import { getLogin } from "../../services/auth";
 import * as api from "../../services/api";
@@ -22,6 +23,7 @@ class ConfirmOrder extends React.Component {
       this.handleChange = this.handleChange.bind(this);
       this.handleAddressChange = this.handleAddressChange.bind(this);
       this.handleOrderMethod = this.handleOrderMethod.bind(this);
+      this.handlePayment = this.handlePayment.bind(this);
       this.order = this.order.bind(this);
 
       this.state = {
@@ -30,7 +32,8 @@ class ConfirmOrder extends React.Component {
         total_price: null,
         user_address: '',
         user_phone: '',
-        method: null
+        method: null,
+        payment: null
       }
     }
 
@@ -69,6 +72,11 @@ class ConfirmOrder extends React.Component {
         this.setState({method: method});
     }    
 
+    handlePayment(event) {
+        let payment = event.target.id;
+        this.setState({payment: payment});
+    }
+
     order(event) {
         event.preventDefault();
 
@@ -79,6 +87,7 @@ class ConfirmOrder extends React.Component {
         order.address = this.state.user_address;
         order.phone = this.state.user_phone;
         order.user = getLogin();
+        order.payment = this.state.payment;
         order.date = new Date();
 
         console.log(order);
@@ -90,7 +99,8 @@ class ConfirmOrder extends React.Component {
             items_in_cart,
             total_price,
             user_address,
-            method
+            method,
+            payment
           } = this.state;
         return(
             <Container fluid className="main-content-container px-4 align-items-center m-auto">
@@ -115,11 +125,11 @@ class ConfirmOrder extends React.Component {
                                         {/* Pedido */ }
                                             <div className="w-100">
                                                 {/* Id do pedido */}
-                                                <div className="d-flex justify-content-between">
-                                                    <Col lg="8" md="8" sm="10" >
-                                                        <span className="text-mutes">
-                                                            x{item.quantity} {item.title} {item.obs && <span className="text-danger">({item.obs})</span>}
-                                                        </span>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <Col lg="8" md="8" sm="10">
+                                                        <h6 className="text-mutes">
+                                                            x{item.quantity} {item.title} {item.obs && <h6 className="text-danger">({item.obs})</h6>}
+                                                        </h6>
                                                     </Col>
                                                     
                                                     <Col lg="4" md="4" sm="2"><h5 className="text-center">R$ {parseFloat(item.quantity * item.price)}</h5></Col>
@@ -131,14 +141,44 @@ class ConfirmOrder extends React.Component {
                                     <Row className="w-100 d-flex justify-content-end mt-4 mb-4">   
                                         <span style={{fontSize:20}}>Total: R${total_price}</span>
                                     </Row>
-
-                                    {method === null &&
-                                    <Row className="d-flex justify-content-around">
-                                        <Button id="not-delivery" onClick={this.handleOrderMethod} role="button" className="btn btn-outline-primary cart-btn" >Quero retirar no balcão</Button>
-                                        <Button id="delivery" onClick={this.handleOrderMethod} role="button" className="btn btn-outline-primary cart-btn" >Entregar no meu endereço</Button>
+                                                     
+                                    <Row>
+                                        <Col sm="12" md="12" lg="6" className="mb-3">
+                                            <strong className="text-muted d-block mb-2">Método de pagamento</strong>
+                                            <fieldset>
+                                                <FormRadio
+                                                id="credit-card"
+                                                name="credit-card"
+                                                checked={payment === 'credit-card'}
+                                                onChange={this.handlePayment}
+                                                >Cartão de cŕedito/débito</FormRadio>
+                                                <FormRadio
+                                                id="money"
+                                                name="money"
+                                                checked={payment === 'money'}
+                                                onChange={this.handlePayment}
+                                                >Dinheiro</FormRadio>
+                                            </fieldset>
+                                        </Col>
+                                        <Col sm="12" md="12" lg="6" className="mb-3">
+                                            <strong className="text-muted d-block mb-2">Entrega</strong>
+                                            <fieldset>
+                                                <FormRadio
+                                                id="delivery"
+                                                name="delivery"
+                                                checked={method === 'delivery'}
+                                                onChange={this.handleOrderMethod}
+                                                >Entregar no meu endereço</FormRadio>
+                                                <FormRadio
+                                                id="not-delivery"
+                                                name="not-delivery"
+                                                checked={method === 'not-delivery'}
+                                                onChange={this.handleOrderMethod}
+                                                >Quero retirar no balcão</FormRadio>
+                                            </fieldset>
+                                        </Col>
                                     </Row>
-                                    }
-                          
+
                                     {method === 'delivery' &&
                                     <Row className="d-block">
                                         <span>Endereço da entrega: </span>
@@ -152,7 +192,7 @@ class ConfirmOrder extends React.Component {
                                     }
                                     
                                     <Row className="d-flex justify-content-center align-items-center mt-4">
-                                        <Button className="btn btn-success" disabled={method == null } type="submit" onClick={this.order}>
+                                        <Button className="btn btn-success" disabled={method == null || payment == null} type="submit" onClick={this.order}>
                                         Confirmar
                                         </Button>
                                     </Row>
