@@ -22,7 +22,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 
 import MainFooter from "../../components/layout/MainFooter";
 import * as api from "../../services/api";
-import { getLogin } from "../../services/auth";
+import { isAuthenticated } from "../../services/auth";
 
 class MakeOrderViewItems extends React.Component {
   _isMounted = false;
@@ -59,11 +59,14 @@ class MakeOrderViewItems extends React.Component {
       .then(data => { if (this._isMounted) this.setState({ items: data }) })
       .catch(error => console.log(error))
 
-    if(getLogin() != null) {
-      this.setState({next: '/confirmar-pedido'})
-    } else {
-      this.setState({next: '/login-pedido'})
-    }
+      await isAuthenticated()
+      .then(res => {
+        if(res === true) {
+          this.setState({next: '/confirmar-pedido'})
+        } else {
+          this.setState({next: '/login-pedido'})
+        }
+      })
   }
 
   componentWillUnmount() {

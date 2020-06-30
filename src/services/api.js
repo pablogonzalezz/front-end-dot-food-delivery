@@ -135,3 +135,10 @@ export const getUserPhone = async (login) => {
         headers: setHeaders(),
     });
 }
+
+export const verifyJwt = async () => {
+    return await fetch(api + `auth/verify-jwt`, {
+        method: "GET", 
+        headers: setHeaders(),
+    });
+}

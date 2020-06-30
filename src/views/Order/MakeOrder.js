@@ -20,7 +20,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import MainFooter from "../../components/layout/MainFooter";
 import PageTitle from "../../components/common/PageTitle";
 import * as api from "../../services/api";
-import { getLogin } from "../../services/auth";
+import {isAuthenticated } from "../../services/auth";
 
 class MakeOrder extends React.Component {
   _isMounted = false;
@@ -45,11 +45,14 @@ class MakeOrder extends React.Component {
     const result = await api.getAllItemGroups();
     await result.json().then(res => this.setState({ item_groups: res }))
 
-    if(getLogin() != null) {
-      this.setState({next: '/confirmar-pedido'})
-    } else {
-      this.setState({next: '/login-pedido'})
-    }
+    await isAuthenticated()
+    .then(res => {
+      if(res === true) {
+        this.setState({next: '/confirmar-pedido'})
+      } else {
+        this.setState({next: '/login-pedido'})
+      }
+    })
   }
 
   componentWillUnmount() {

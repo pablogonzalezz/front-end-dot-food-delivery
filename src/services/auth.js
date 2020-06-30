@@ -1,5 +1,7 @@
+import { verifyJwt } from "./api";
+
 export const TOKEN_KEY = "@dotfootdelivery-Token"
-export const isAuthenticated = () => localStorage.getItem(TOKEN_KEY) !== null;
+
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const getLogin = () => localStorage.getItem("login");
 export const login = (token, login) => {
@@ -10,3 +12,18 @@ export const logout = () => {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem("login");
 };
+
+export const isAuthenticated = async () => {
+  let isAuthenticated;
+  await verifyJwt()
+  .then(res => res.json())
+  .then(data => {
+    if (data.auth === false) {
+      logout();
+      isAuthenticated = false;
+    } else {
+      isAuthenticated = true;
+    }
+  })
+  return isAuthenticated;
+}

@@ -9,7 +9,7 @@ import {
     Button,
     ListGroupItem,
 } from "shards-react";
-import { getLogin, login } from "../../services/auth";
+import { getLogin } from "../../services/auth";
 import * as api from "../../services/api";
 
 
@@ -104,7 +104,7 @@ class ConfirmOrder extends React.Component {
                         <Card>
                             <CardBody fluid className="align-items-center">
                                 <Row>
-                                <Col className="m-auto" lg="8" md="8" sm="12">
+                                <Col className="m-auto" lg="10" md="8" sm="12">
                                     <CardHeader className="text-center">
                                         <h4>Agora é só confirmar o pedido {'\u{1F60E}'}</h4>
                                     </CardHeader>
@@ -113,7 +113,7 @@ class ConfirmOrder extends React.Component {
                                         {items_in_cart.map((item, index) => (
                                         <Row key={index} className="blog-comments__item d-flex p-3 justify-content-between align-items-center">
                                         {/* Pedido */ }
-                                            <div className="blog-comments__content w-100">
+                                            <div className="w-100">
                                                 {/* Id do pedido */}
                                                 <div className="d-flex justify-content-between">
                                                     <Col lg="8" md="8" sm="10" >
@@ -140,10 +140,10 @@ class ConfirmOrder extends React.Component {
                                     }
                           
                                     {method === 'delivery' &&
-                                    <Row>
+                                    <Row className="d-block">
                                         <span>Endereço da entrega: </span>
-                                        <span className="m-0 my-1 text-muted">{user_address.rua}, {user_address.numero} - {user_address.bairro} | {user_address.cidade}/{user_address.uf}</span>
-                                        <a href="#">Mudar o endereço</a>
+                                        <p className="text-muted">{user_address.rua}, {user_address.numero} - {user_address.bairro} | {user_address.cidade}/{user_address.uf}</p>
+                                        <a href="">Mudar o endereço</a>
                                     </Row>
                                     }
 
