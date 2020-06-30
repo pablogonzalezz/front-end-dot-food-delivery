@@ -34,6 +34,13 @@ class Login extends React.Component {
 
     componentDidMount(){
       this._isMounted = true;
+
+      let urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.get('next') != null) {
+        this.setState({next: "/" + urlParams.get('next')})
+      } else {
+        this.setState({next: "/"})
+      }
     }
   
     componentWillUnmount(){
@@ -48,13 +55,13 @@ class Login extends React.Component {
         event.preventDefault();
 
         const { history } = this.props;
-
+        
         api.Authenticate(this.state.login, this.state.password)
         .then(res => {
             if(res.status === 200) {
                 res.json().then(data => {
                     login(data.token, this.state.login);
-                    history.push("/")
+                    history.push(this.state.next)
                 })
             } else {
                 this.setState({errors: "Login não autorizado. Verifique seu login e senha."})

@@ -9,6 +9,8 @@ import { DefaultLayout } from "./layouts";
 import ReceivedOrder from "./views/Order/ReceivedOrder";
 import MakeOrder from "./views/Order/MakeOrder";
 import MakeOrderViewItems from "./views/Order/MakeOrderViewItems";
+import PreConfirmOrder from "./views/Order/PreConfirmOrder";
+import ConfirmOrder from "./views/Order/ConfirmOrder";
 
 //  Login Routes
 import Login from "./views/Login/Login";
@@ -47,6 +49,8 @@ const Routes = () => (
       <Route path="/login" component={Login}/>
       <Route path="/fazer-pedido" component={MakeOrder}/>
       <Route path="/fazer-pedido-items/:id" component={MakeOrderViewItems}/>
+      <Route path="/login-pedido" component={PreConfirmOrder}/>
+      <Route path="/confirmar-pedido" component={ConfirmOrder}/>
       <PrivateRoute path="/pedidos" component={ReceivedOrder}/>
       <PrivateRoute path="/cardapio" component={ViewGroups}/>
       <PrivateRoute path="/create-group" component={CreateGroup}/>

@@ -105,3 +105,33 @@ export const Authenticate = async (login, password) => {
         }) 
     });
 }
+
+export const CreateUser = async (login,name,cpf,email,phone,password,address) => {
+    return await fetch(api + 'auth/create_user', {
+        method: "POST", 
+        headers: tokenlessHeaders,
+        body: JSON.stringify({ 
+            login: login,
+            name: name,
+            cpf: cpf,
+            email: email,
+            phone: phone,
+            address: address,
+            password: password
+        }) 
+    });
+}
+
+export const getUserAddress = async (login) => {
+    return await fetch(api + `user/get_user_address/${login}`, {
+        method: "GET", 
+        headers: setHeaders(),
+    });
+}
+
+export const getUserPhone = async (login) => {
+    return await fetch(api + `user/get_user_phone/${login}`, {
+        method: "GET", 
+        headers: setHeaders(),
+    });
+}

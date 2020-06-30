@@ -20,3 +20,8 @@
 .cart-modal {
   z-index: 10;
 }
+
+.vl {
+  border: 1px solid #e3e3e3;
+  height: 300px;
+}

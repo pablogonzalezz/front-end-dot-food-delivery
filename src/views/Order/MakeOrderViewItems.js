@@ -22,6 +22,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 
 import MainFooter from "../../components/layout/MainFooter";
 import * as api from "../../services/api";
+import { getLogin } from "../../services/auth";
 
 class MakeOrderViewItems extends React.Component {
   _isMounted = false;
@@ -37,7 +38,8 @@ class MakeOrderViewItems extends React.Component {
       open_modal_cart: false,
       selected_item: {},
       quantity: 1,
-      obs: null
+      obs: null,
+      next: null
     }
 
     this.toggle_modal = this.toggle_modal.bind(this);
@@ -45,6 +47,7 @@ class MakeOrderViewItems extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.addToCart = this.addToCart.bind(this);
     this.deleteFromCart = this.deleteFromCart.bind(this);
+    this.addAndDone = this.addAndDone.bind(this);
   }
 
   async componentDidMount() {
@@ -55,6 +58,12 @@ class MakeOrderViewItems extends React.Component {
       .then(res => res.json())
       .then(data => { if (this._isMounted) this.setState({ items: data }) })
       .catch(error => console.log(error))
+
+    if(getLogin() != null) {
+      this.setState({next: '/confirmar-pedido'})
+    } else {
+      this.setState({next: '/login-pedido'})
+    }
   }
 
   componentWillUnmount() {
@@ -97,7 +106,6 @@ class MakeOrderViewItems extends React.Component {
     this.setState({ items_in_cart: items_in_cart })
     sessionStorage.setItem('items_in_cart', JSON.stringify(items_in_cart))
     this.toggle_modal();
-    console.log()
   }
 
   deleteFromCart(idx) {
@@ -109,6 +117,22 @@ class MakeOrderViewItems extends React.Component {
     }
   }
 
+  addAndDone() {
+    let items_in_cart = this.state.items_in_cart;
+    let selected_item = this.state.selected_item;
+    let quantity = this.state.quantity;
+    let obs = this.state.obs;
+
+    selected_item.quantity = quantity;
+    selected_item.obs = obs;
+
+    items_in_cart.push(selected_item);
+
+    this.setState({ items_in_cart: items_in_cart })
+    sessionStorage.setItem('items_in_cart', JSON.stringify(items_in_cart))
+    window.location = this.state.next;
+  }
+
   render() {
     const {
       items,
@@ -116,7 +140,8 @@ class MakeOrderViewItems extends React.Component {
       open_modal,
       selected_item,
       quantity,
-      open_modal_cart
+      open_modal_cart,
+      next
     } = this.state;
 
     return (
@@ -194,7 +219,7 @@ class MakeOrderViewItems extends React.Component {
         <div>
           <Modal className="" show={open_modal}>
             <ModalHeader className="d-flex justify-content-between justify-items-center">
-              <span>Carrinho</span>
+              <h4 className="m-0">Carrinho</h4>
               <i onClick={(e) => { this.toggle_modal(null) }} className="material-icons" style={{ fontSize: 22 }}>close</i>
             </ModalHeader>
             <ModalBody>
@@ -232,7 +257,7 @@ class MakeOrderViewItems extends React.Component {
             <ModalFooter>
               <div className="d-flex justify-content-between w-100">
                 <Button className="btn btn-primary cart-btn" onClick={this.addToCart}>Adicionar e Continuar Comprando</Button>
-                <Button className="btn btn-outline-primary cart-btn" type="submit"><i className="material-icons">check</i> Finalizar Pedido</Button>
+                <Button role="button" onClick={this.addAndDone} className="btn btn-outline-primary cart-btn" type="submit"><i className="material-icons">check</i>Adicionar e Finalizar Pedido</Button>
               </div>
 
             </ModalFooter>
@@ -243,7 +268,7 @@ class MakeOrderViewItems extends React.Component {
           <Modal className="" show={open_modal_cart}>
 
             <ModalHeader className="d-flex justify-content-between justify-items-center">
-              <span>Carrinho</span>
+              <h4 className="m-0">Adicionar item</h4>
               <i onClick={this.toggle_modal_cart} className="material-icons" style={{ fontSize: 22 }}>close</i>
             </ModalHeader>
 
@@ -264,9 +289,9 @@ class MakeOrderViewItems extends React.Component {
                     }
                   </div>
                   <div className="d-flex justify-content-between">
-                    <Col className="form-group d-block">
+                    <Col className="form-group d-block m-auto">
                       <label htmlFor="obs">Quantidade</label>
-                      <p className="w-100">x{item.quantity} = R$ {item.quantity * item.price}</p>
+                      <span className="w-100">x{item.quantity} = R$ {item.quantity * item.price}</span>
                     </Col>
                     <div lg="1" md="1" sm="1" className="form-group d-block">
                       <a role="button" id="delete-item-cart" onClick={(e) => { this.deleteFromCart(idx) }}>
@@ -280,7 +305,7 @@ class MakeOrderViewItems extends React.Component {
             <ModalFooter>
               <div className="d-flex justify-content-between w-100">
                 <Button className="btn btn-primary cart-btn" onClick={this.toggle_modal_cart}>Continuar Comprando</Button>
-                <Button className="btn btn-outline-primary cart-btn" type="submit"><i className="material-icons">check</i> Finalizar Pedido</Button>
+                <a role="button" href={next} className="btn btn-outline-primary cart-btn" type="submit" disabled={!items_in_cart.length > 0}><i className="material-icons">check</i> Finalizar Pedido</a>
               </div>
 
             </ModalFooter>
