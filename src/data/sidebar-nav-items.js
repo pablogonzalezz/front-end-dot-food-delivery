@@ -12,29 +12,24 @@ export default function() {
       to: "/cardapio",
     },
     {
-      title: "Add New Post",
-      htmlBefore: '<i class="material-icons">note_add</i>',
-      to: "/add-new-post",
-    },
-    {
-      title: "Forms & Components",
-      htmlBefore: '<i class="material-icons">view_module</i>',
-      to: "/components-overview",
-    },
-    {
-      title: "Tables",
-      htmlBefore: '<i class="material-icons">table_chart</i>',
+      title: "Mesas",
+      htmlBefore: '<i class="material-icons">food_bank</i>',
       to: "/tables",
     },
     {
-      title: "User Profile",
+      title: "Usuários",
       htmlBefore: '<i class="material-icons">person</i>',
-      to: "/user-profile-lite",
+      to: "#",
     },
     {
-      title: "Errors",
-      htmlBefore: '<i class="material-icons">error</i>',
-      to: "/errors",
-    }
+      title: "Relatório de itens",
+      htmlBefore: '<i class="material-icons">insert_chart</i>',
+      to: "#",
+    },
+    {
+      title: "Relatório de usuários",
+      htmlBefore: '<i class="material-icons">people</i>',
+      to: "#",
+    },
   ];
 }
