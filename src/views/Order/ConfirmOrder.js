@@ -183,7 +183,7 @@ class ConfirmOrder extends React.Component {
                                     <Row className="d-block">
                                         <span>Endereço da entrega: </span>
                                         <p className="text-muted">{user_address.rua}, {user_address.numero} - {user_address.bairro} | {user_address.cidade}/{user_address.uf}</p>
-                                        <a href="">Mudar o endereço</a>
+                                        <a href="/">Mudar o endereço</a>
                                     </Row>
                                     }
 
