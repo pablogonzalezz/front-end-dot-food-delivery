@@ -26,6 +26,9 @@ import ViewItems from "./views/Items/ViewItems";
 import CreateItem from "./views/Items/CreateItem";
 import UpdateItem from "./views/Items/UpdateItem";
 
+// Tables Routes
+import TablesView from "./views/Tables/TablesView";
+
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -53,6 +56,7 @@ const Routes = () => (
       <Route path="/confirmar-pedido" component={ConfirmOrder}/>
       <PrivateRoute path="/pedidos" component={ReceivedOrder}/>
       <PrivateRoute path="/cardapio" component={ViewGroups}/>
+      <PrivateRoute path="/tables" component={TablesView}/>
       <PrivateRoute path="/create-group" component={CreateGroup}/>
       <PrivateRoute path="/update-group/:id" component={UpdateGroup}/>
       <PrivateRoute path="/view-group-items/:id" component={ViewItems}/>
