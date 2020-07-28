@@ -14,7 +14,7 @@ import ConfirmOrder from "./views/Order/ConfirmOrder";
 
 //  Login Routes
 import Login from "./views/Login/Login";
-import { isAuthenticated } from "./services/auth";
+import { getToken } from "./services/auth";
 
 // ItemGroup Routes
 import ViewGroups from "./views/ItemGroup/ViewGroups";
@@ -29,21 +29,31 @@ import UpdateItem from "./views/Items/UpdateItem";
 // Tables Routes
 import TablesView from "./views/Tables/TablesView";
 
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  let auth = getToken()
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      isAuthenticated() ? (
-        <DefaultLayout>
-          <Component {...props}/>
-        </DefaultLayout>
-      ) : (
-        <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
-      )
-    }
-  />
-);
+  if (auth !== null) {
+    return (<Route
+        {...rest}
+        render={props =>
+          (
+            <DefaultLayout>
+              <Component {...props}/>
+            </DefaultLayout>
+          )
+        }
+      />)
+  } else {
+    return (<Route
+        {...rest}
+        render={props => 
+          (
+            <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
+          )
+        }
+        />)
+  }
+}
 
 const Routes = () => (
   <BrowserRouter>
